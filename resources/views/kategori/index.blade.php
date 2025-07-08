@@ -60,6 +60,16 @@
                     .done((response) => {
                         $('#modal-form').modal('hide');
                         table.ajax.reload();
+                    
+                        let isEdit = $('#modal-form [name=_method]').val() === 'put';
+                    
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: isEdit ? 'Data kategori berhasil diperbarui' : 'Data kategori berhasil disimpan',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#4f9b8f',
+                        });
                     })
                     .fail((xhr) => {
                         if (xhr.status === 422) {
