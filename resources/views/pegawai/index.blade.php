@@ -64,6 +64,16 @@
                     .done((response) => {
                         $('#modal-form').modal('hide');
                         table.ajax.reload();
+                    
+                        let isEdit = $('#modal-form [name=_method]').val() === 'put';
+                    
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: isEdit ? 'Data pegawai berhasil diperbarui' : 'Data pegawai berhasil disimpan',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#4f9b8f',
+                        });
                     })
                     .fail((errors) => {
                         alert('Tidak dapat menyimpan data');
