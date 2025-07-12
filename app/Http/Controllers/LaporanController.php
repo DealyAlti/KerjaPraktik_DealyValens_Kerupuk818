@@ -54,7 +54,15 @@ class LaporanController extends Controller
 
         // Jika ada data, buat PDF
         $pdf = PDF::loadView('laporan.cetak', compact('laporan', 'tanggalAwal', 'tanggalAkhir', 'jenisLaporan'));
-        return $pdf->download('laporan_' . $jenisLaporan . '.pdf');
+        // Format tanggal jadi dd-mm-yyyy
+        $start = \Carbon\Carbon::parse($tanggalAwal)->format('d-m-Y');
+        $end = \Carbon\Carbon::parse($tanggalAkhir)->format('d-m-Y');
+        
+        // Buat nama file dengan tanggal
+        $namaFile = 'Laporan_' . str_replace('_', '', ucwords($jenisLaporan)) . "_{$start}_sampai_{$end}.pdf";
+        
+        return $pdf->download($namaFile);
+
     }
 
 }
