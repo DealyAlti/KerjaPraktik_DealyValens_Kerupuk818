@@ -146,7 +146,9 @@ class DashboardController extends Controller
         }
 
         // Menggabungkan data barang masuk dan keluar
-        $produkNames = $barangMasuk->pluck('nama_produk')->unique();
+        $produkNames = $barangMasuk->pluck('nama_produk')
+            ->merge($barangKeluar->pluck('nama_produk'))
+            ->unique();
         $datasetsMasuk = [];
         $datasetsKeluar = [];
 
