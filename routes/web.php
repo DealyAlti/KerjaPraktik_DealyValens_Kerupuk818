@@ -45,7 +45,7 @@ Route::get('/redirect-after-login', function () {
 })->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
     Route::get('/user/data', [UserController::class, 'data'])->name('user.data');
     Route::resource('/user', UserController::class);
@@ -56,13 +56,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/produk', ProdukController::class);
 
     Route::prefix('permintaan')->name('permintaan.')->group(function () {
-        Route::get('/formpermintaan', [PermintaanBarangController::class, 'index'])->name('index'); // Form permintaan
         Route::post('/simpanpermintaan', [PermintaanBarangController::class, 'store'])->name('store'); // Simpan permintaan
-        Route::get('/permintaan/data', [PermintaanBarangController::class, 'data'])->name('data');  // Ambil data permintaan barang
-        Route::get('permintaan/list', [PermintaanBarangController::class, 'list'])->name('list');
-        Route::post('permintaan/update/{id}', [PermintaanBarangController::class, 'updateStatus'])->name('updateStatus');
-        Route::delete('/permintaan/{id}', [PermintaanBarangController::class, 'destroy'])->name('destroy');
-        Route::post('permintaan/batal/{id}', [PermintaanBarangController::class, 'cancelRequest'])->name('cancelRequest');
+        Route::get('/data', [PermintaanBarangController::class, 'data'])->name('data');  // Ambil data permintaan barang
+        Route::get('list', [PermintaanBarangController::class, 'list'])->name('list');
+        Route::post('update/{id}', [PermintaanBarangController::class, 'updateStatus'])->name('updateStatus');
+        Route::delete('{id}', [PermintaanBarangController::class, 'destroy'])->name('destroy');
+        Route::post('batal/{id}', [PermintaanBarangController::class, 'cancelRequest'])->name('cancelRequest');
 
 
     });
@@ -96,9 +95,14 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'level:2'], function () {
         Route::get('/kasir/dashboard', [DashboardController::class, 'kasirDashboard'])->name('kasir.dashboard');
+        Route::get('/formpermintaan', [PermintaanBarangController::class, 'index'])->name('permintaan.index'); // Form permintaan
     });
 
     Route::group(['middleware' => 'level:1'], function () {
         Route::get('/kepala/dashboard', [DashboardController::class, 'kepalaDashboard'])->name('kepala.dashboard');
+    });
+    
+    Route::group(['middleware' => 'level:0'], function () {
+            Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 });
