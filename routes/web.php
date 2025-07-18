@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update/{id}', [PermintaanBarangController::class, 'updateStatus'])->name('updateStatus');
         Route::delete('{id}', [PermintaanBarangController::class, 'destroy'])->name('destroy');
         Route::post('batal/{id}', [PermintaanBarangController::class, 'cancelRequest'])->name('cancelRequest');
+        Route::get('/get-produk-by-kategori/{id}', [PermintaanBarangController::class, 'getProdukByKategori'])->name('getproduk');
 
 
     });
@@ -71,10 +72,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/barangmasuk/data', [BarangMasukController::class, 'data'])->name('barangmasuk.data'); // Custom route for DataTables
         Route::resource('/barangmasuk', BarangMasukController::class); // Resource route (Handles CRUD operations)
         Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barang_masuk.destroy'); // Custom delete route
+        Route::get('/get-produk-by-kategori/{id}', [BarangMasukController::class, 'getProdukByKategori'])->name('get.produk.by.kategori');
         
         Route::get('barangkeluar/data', [BarangKeluarController::class, 'data'])->name('barangkeluar.data');
         Route::resource('/barangkeluar', BarangKeluarController::class);
         Route::delete('/barangkeluar/{id}', [BarangKeluarController::class, 'destroy'])->name('barang_keluar.destroy');
+        Route::get('/get-produk-by-kategori/{id}', [BarangKeluarController::class, 'getProdukByKategori'])->name('barangkeluar.getproduk');
 
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::post('/laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
