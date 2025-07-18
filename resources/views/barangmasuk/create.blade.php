@@ -43,6 +43,7 @@
                 <table class="table mt-3" id="requestTable">
                     <thead>
                         <tr>
+                            <th>Kategori</th>
                             <th>Nama Produk</th>
                             <th>Jumlah Masuk</th>
                             <th>Aksi</th>
@@ -72,26 +73,27 @@
         // Membuat form input produk dan jumlah
         const requestRow = document.createElement('tr');
         requestRow.innerHTML = `
-            <td>
-                <select name="id_produk[]" class="form-control" required
-                        oninvalid="this.setCustomValidity('Silakan pilih produk.')"
-                        oninput="this.setCustomValidity('')">
-                    <option value="">Pilih Produk</option>
-                    @foreach($produk as $item)
-                        <option value="{{ $item->id_produk }}">
-                            {{ $item->nama_produk }} ({{ $item->kategori->nama_kategori }}) : {{ $item->stok }}
-                        </option>
-                    @endforeach
-                </select>
-            </td>
-            <td><input type="number" name="jumlahMasuk[]" class="form-control" required min="1"
-                oninvalid="this.setCustomValidity(
-                    this.validity.valueMissing ? 'Jumlah masuk harus diisi.' :
-                    this.validity.rangeUnderflow ? 'Jumlah tidak boleh kurang dari 1.' : ''
-                ); this.reportValidity();"
-                oninput="this.setCustomValidity('')">
-            </td>
-            <td><button type="button" class="btn btn-danger btn-sm removeRequest">Hapus</button></td>
+            <tr>
+                <td>
+                    <select name="kategori_id[]" class="form-control kategori-select" required>
+                        <option value="">Pilih Kategori</option>
+                        @foreach(\App\Models\Kategori::all() as $kategori)
+                            <option value="{{ $kategori->id_kategori }}">{{ $kategori->nama_kategori }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <select name="id_produk[]" class="form-control produk-select" required disabled>
+                        <option value="">Pilih Produk</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="jumlahMasuk[]" class="form-control" required min="1">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm removeRequest">Hapus</button>
+                </td>
+            </tr>
         `;
         
         // Menambahkan row ke tabel
@@ -138,6 +140,29 @@
             }
         });
     });
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.classList.contains('kategori-select')) {
+            const kategoriSelect = e.target;
+            const row = kategoriSelect.closest('tr');
+            const produkSelect = row.querySelector('.produk-select');
+    
+            const kategoriId = kategoriSelect.value;
+    
+            produkSelect.innerHTML = '<option value="">Loading...</option>';
+            produkSelect.disabled = true;
+    
+            fetch(`/get-produk-by-kategori/${kategoriId}`)
+                .then(response => response.json())
+                .then(data => {
+                    produkSelect.innerHTML = '<option value="">Pilih Produk</option>';
+                    data.forEach(produk => {
+                        produkSelect.innerHTML += `<option value="${produk.id_produk}">${produk.nama_produk} (Stok: ${produk.stok})</option>`;
+                    });
+                    produkSelect.disabled = false;
+                });
+        }
+    });
+
 
 
 </script>
