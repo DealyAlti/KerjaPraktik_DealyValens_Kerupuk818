@@ -11,7 +11,7 @@
 
 @section('content')
     <!-- Form untuk memilih laporan -->
-    <form action="{{ route('laporan.cetak') }}" method="POST">
+    <form action="{{ route('laporan.cetak') }}" method="POST" target="_blank">
         @csrf
         <div class="row mb">
             <div class="col-sm-6">
