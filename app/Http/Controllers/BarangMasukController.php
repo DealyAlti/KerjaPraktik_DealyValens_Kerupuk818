@@ -173,6 +173,14 @@ class BarangMasukController extends Controller
 
         return response()->json(['message' => 'Barang masuk berhasil dihapus.']);
     }
+    
+    public function getProdukByKategori($id)
+    {
+        $produk = Produk::where('id_kategori', $id)->get();
+    
+        return response()->json($produk);
+    }
+
 
 
     
