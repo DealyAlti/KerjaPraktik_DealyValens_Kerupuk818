@@ -61,7 +61,7 @@ class LaporanController extends Controller
         // Buat nama file dengan tanggal
         $namaFile = 'Laporan_' . str_replace('_', '', ucwords($jenisLaporan)) . "_{$start}_sampai_{$end}.pdf";
         
-        return $pdf->download($namaFile);
+        return $pdf->stream($namaFile);
 
     }
 
