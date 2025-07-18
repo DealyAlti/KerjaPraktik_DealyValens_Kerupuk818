@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PermintaanBarang;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use App\Models\Kategori;
 
 class PermintaanBarangController extends Controller
 {
@@ -15,8 +16,10 @@ class PermintaanBarangController extends Controller
      */
     public function index()
     {
-        $produk = Produk::all(); // Ambil semua produk untuk ditampilkan di form
-        return view('permintaan.index', compact('produk'));
+        $produk = Produk::all();
+        $kategori = Kategori::all(); // <- Tambahkan ini
+    
+        return view('permintaan.index', compact('produk', 'kategori')); // <- Tambahkan 'kategori' di compact
     }
 
     public function data()
@@ -195,9 +198,7 @@ class PermintaanBarangController extends Controller
      */
     public function destroy($id)
     {
-        $permintaan_barang = PermintaanBarang::find($id)->delete();
-
-        return response(null, 204);
+        //
     }
 
     public function cancelRequest($id)
@@ -215,5 +216,12 @@ class PermintaanBarangController extends Controller
 
         return response()->json(['message' => 'Permintaan tidak ditemukan'], 404);
     }
+    
+    public function getProdukByKategori($id)
+    {
+        $produk = Produk::where('id_kategori', $id)->get();
+        return response()->json($produk);
+    }
+
 
 }
