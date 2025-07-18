@@ -203,4 +203,11 @@ class BarangKeluarController extends Controller
         return response()->json(['error' => 'Data tidak ditemukan'], 404);
     }
     
+    public function getProdukByKategori($id)
+    {
+        $produk = Produk::where('id_kategori', $id)->get();
+        return response()->json($produk);
+    }
+
+    
 }
